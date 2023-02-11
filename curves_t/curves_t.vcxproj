@@ -130,7 +130,7 @@
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="curve.h" />
+    <ClInclude Include="Сurve.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="tests.h" />
   </ItemGroup>
