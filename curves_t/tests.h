@@ -4,9 +4,13 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <cstring>              // for strcmp in throw-catch check
 
 #include "Ñurve.h"
 #include "Point.h"
+#include "3Dvector.h"
+
+double PI = 3.14159265358979323846;
 
 namespace MyUnitTests {
 
@@ -77,6 +81,8 @@ namespace MyUnitTests {
         }
         {
             const Point<double> p(1, 2, 3);
+            const Point<float> p1(1.0, 2.0, 3.0);
+            ASSERT_EQUAL_HINT(p, p1, "Point<double> != Point<float> with same coordinates");
         }
     }
 
@@ -101,21 +107,97 @@ namespace MyUnitTests {
             const Point<float> p1(1, 2, 3);
             ASSERT_EQUAL_HINT(p, p1, "Equal point ain't equal to const Point somewhy");
         }
+        {       // AlmostEquality check
+            Point<double> p1(0, 0, 0.1000001);
+            Point<double> p2(0, 0, 0.0999999);
+            ASSERT_EQUAL_HINT(p1, p2, "Almost equal point ain't equal somewhy");
+        }
     }
 
     void CircleConstruction() {
-
+        {
+            Circle<double> a(5);
+        }
+        {       // non-floating type Circle construction
+            try {
+                Circle<int> p(1);
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Circle coordinate is NOT floating type") == 0) {           // equal
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                cerr << "Circle constructed with non-floating type\n";
+            }
+        }
     }
 
     void CircleGetPointOfParam() {
         {
             Circle<double> a(1.0);
             const Point<double> p0 = a.GetPointByParam(0.0);
-            Point<double> p0c(0, 1, 0);
+            Point<double> p0c(1, 0, 0);
             ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = 0");
         }
+        {
+            Circle<double> a(1.0);
+            const Point<double> p0 = a.GetPointByParam(PI);
+            Point<double> p0c(-1.0, 0.0, 0.0);
+            ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = PI");
+        }
+        {
+            Circle<double> a(2.0);
+            const Point<double> p0 = a.GetPointByParam(PI);
+            Point<double> p0c(0, 2, 0);
+            ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = PI");
+        }
+    }
 
-
+    void TriDvectorConstruction() {
+        {
+            TriDvector<double> v(0.0, 0.0, 0.0);
+        }
+        {
+            TriDvector<double> v(1.0, 2.0, 3.0);
+            TriDvector<float> v1(1.0, 2.0, 3.0);
+            ASSERT_EQUAL_HINT(v, v1, "3Dvector<double> != 3Dvector<float> with same coordinates");
+        }
+        {       // non-floating type 3DVector construction
+            try {
+                TriDvector<int> p(1, 2, 3);
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "3Dvector coordinate is NOT floating type") == 0) {           // equal
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                cerr << "3Dvector constructed with non-floating type\n";
+            }
+        }
+        {       // non-floating type 3DVector construction
+            try {
+                TriDvector<unsigned int> p(1, 2, 3);
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "3Dvector coordinate is NOT floating type") == 0) {           // equal
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                cerr << "3Dvector constructed with non-floating type\n";
+            }
+        }
     }
 
     void RunTests() {
@@ -123,7 +205,8 @@ namespace MyUnitTests {
         RUN_TEST(PointEqualityCheck);
         RUN_TEST(CircleConstruction);
         RUN_TEST(CircleGetPointOfParam);
+        RUN_TEST(TriDvectorConstruction);
         cerr << "Tests done\n";
     }
 
-}
+}       // namespace MyUnitTests

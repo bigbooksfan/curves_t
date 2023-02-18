@@ -130,6 +130,7 @@
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3Dvector.h" />
     <ClInclude Include="Сurve.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="tests.h" />

@@ -30,8 +30,9 @@ private:			// fields
 /****************************************** DEFINITIONS ************************************************/
 
 template <typename T>
-Circle<T>::Circle(T rad) {
-	rad_ = rad;
+Circle<T>::Circle(T rad) : rad_(rad) {
+	if (!std::is_floating_point<T>::value)
+		throw std::logic_error("Circle coordinate is NOT floating type");
 }
 
 template <typename T>
@@ -41,8 +42,8 @@ const T Circle<T>::GetRad() {
 
 template <typename T>
 const Point<T> Circle<T>::GetPointByParam(double param) {
-	T x = rad_ * std::sin(param / rad_);
-	T y = rad_ * std::cos(param / rad_);
+	T x = rad_ * std::cos(param / rad_);
+	T y = rad_ * std::sin(param / rad_);
 	T z = 0;
 
 	Point<T> ret(x, y, z);
