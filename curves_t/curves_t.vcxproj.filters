@@ -32,5 +32,11 @@
     <ClInclude Include="3Dvector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="circle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ellipsis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

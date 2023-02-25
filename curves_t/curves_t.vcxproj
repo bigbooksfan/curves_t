@@ -131,6 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dvector.h" />
+    <ClInclude Include="circle.h" />
+    <ClInclude Include="ellipsis.h" />
     <ClInclude Include="Сurve.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="tests.h" />

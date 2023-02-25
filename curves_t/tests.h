@@ -7,6 +7,8 @@
 #include <cstring>              // for strcmp in throw-catch check
 
 #include "Ñurve.h"
+#include "circle.h"
+#include "ellipsis.h"
 #include "Point.h"
 #include "3Dvector.h"
 
@@ -52,7 +54,7 @@ namespace MyUnitTests {
 
 //#define ASSERT(expr) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, "")
 //
-//#define ASSERT_HINT(expr, hint) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, (hint))
+#define ASSERT_HINT(expr, hint) AssertImpl(!!(expr), #expr, __FILE__, __FUNCTION__, __LINE__, (hint))
 //
 //#define ASSERT_EQUAL(a, b) AssertEqualImpl((a), (b), #a, #b, __FILE__, __FUNCTION__, __LINE__, "")
 
@@ -71,12 +73,13 @@ namespace MyUnitTests {
         {       // non-floating type point construction
             try {
                 Point<long> p(long(1), long(2), long(3));
+                ASSERT_HINT(false, "No exception by Point constructed with non-floating type\n");
             }
             catch (const std::logic_error&) {
                 // OK
             }
             catch (...) {
-                cerr << "Point constructed with non-floating type\n";
+                ASSERT_HINT(false, "Point constructed with non-floating type\n");
             }
         }
         {
@@ -121,9 +124,10 @@ namespace MyUnitTests {
         {       // non-floating type Circle construction
             try {
                 Circle<int> p(1);
+                ASSERT_HINT(false, "No exception by Circle constructed with non-floating type\n");                  // abort
             }
             catch (const std::logic_error& e) {
-                if (std::strcmp(e.what(), "Circle coordinate is NOT floating type") == 0) {           // equal
+                if (std::strcmp(e.what(), "Circle coordinate is NOT floating type") == 0) {         // equal
                     // OK
                 }
                 else {
@@ -131,7 +135,24 @@ namespace MyUnitTests {
                 }
             }
             catch (...) {
-                cerr << "Circle constructed with non-floating type\n";
+                ASSERT_HINT(false, "Circle constructed with non-floating type\n");
+            }
+        }
+        {
+            try {
+                Circle<double> p(-5.0);
+                ASSERT_HINT(false, "No exception by Circle constructed with radii <= 0\n");                  // abort
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Radii must be positive") == 0) {
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                ASSERT_HINT(false, "Circle constructed with radii <= 0\n");
             }
         }
     }
@@ -169,6 +190,7 @@ namespace MyUnitTests {
         {       // non-floating type 3DVector construction
             try {
                 TriDvector<int> p(1, 2, 3);
+                ASSERT_HINT(false, "No exception by 3Dvector constructed with non-floating type\n");
             }
             catch (const std::logic_error& e) {
                 if (std::strcmp(e.what(), "3Dvector coordinate is NOT floating type") == 0) {           // equal
@@ -179,12 +201,13 @@ namespace MyUnitTests {
                 }
             }
             catch (...) {
-                cerr << "3Dvector constructed with non-floating type\n";
+                ASSERT_HINT(false, "3Dvector constructed with non-floating type\n");
             }
         }
         {       // non-floating type 3DVector construction
             try {
                 TriDvector<unsigned int> p(1, 2, 3);
+                ASSERT_HINT(false, "No exception by 3Dvector constructed with non-floating type\n");
             }
             catch (const std::logic_error& e) {
                 if (std::strcmp(e.what(), "3Dvector coordinate is NOT floating type") == 0) {           // equal
@@ -195,8 +218,96 @@ namespace MyUnitTests {
                 }
             }
             catch (...) {
-                cerr << "3Dvector constructed with non-floating type\n";
+                ASSERT_HINT(false, "3Dvector constructed with non-floating type\n");
             }
+        }
+    }
+
+    void CircleDerivative() {
+        {
+            Circle<double> p(1);
+            TriDvector<double> a(0.0, 1.0, 0.0);
+            TriDvector<double> b = p.GetDerivativeByParam(0.0);
+            ASSERT_EQUAL_HINT(a, b, "Derivative by param 0 is wrong");
+        }
+        {
+            Circle<double> p(1);
+            TriDvector<double> correct(-1.0, 0.0, 0.0);
+            TriDvector<double> getted = p.GetDerivativeByParam(PI/2);
+            ASSERT_EQUAL_HINT(correct, getted, "Derivative by param PI/2 is wrong");
+        }
+        {
+            Circle<double> p(1);
+            TriDvector<double> correct(0.0, -1.0, 0.0);
+            TriDvector<double> getted = p.GetDerivativeByParam(PI);
+            ASSERT_EQUAL_HINT(correct, getted, "Derivative by param PI is wrong");
+        }
+        {
+            Circle<double> p(10);
+            TriDvector<double> correct(-0.4794255386042030, 0.8775825618903727, 0.0);
+            TriDvector<double> getted = p.GetDerivativeByParam(5);
+            ASSERT_EQUAL_HINT(correct, getted, "Derivative by param 5 is wrong");
+        }
+    }
+
+    void EllipsisConstruction() {
+        {
+            Ellipsis<double> a(5, 10);
+        }
+        {       // non-floating type Circle construction
+            try {
+                Ellipsis<int> p(1, 2);
+                ASSERT_HINT(false, "No exception by Ellipsis constructed with non-floating type\n");                  // abort
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Ellipsis coordinate is NOT floating type") == 0) {         // equal
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                ASSERT_HINT(false, "Ellipsis constructed with non-floating type\n");
+            }
+        }
+        {
+            try {
+                Ellipsis<double> p(-5.0, 6);
+                ASSERT_HINT(false, "No exception by Ellipsis constructed with radii <= 0\n");                  // abort
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Radii must be positive") == 0) {
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                ASSERT_HINT(false, "Ellipsis constructed with radii <= 0\n");
+            }
+        }
+    }
+
+    void EllipsisGetPointOfParam() {
+        {
+            Ellipsis<double> a(2.0, 1.0);
+            const Point<double> getted = a.GetPointByParam(0.0);
+            Point<double> correct(2, 0, 0);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param = 0");
+        }
+        {
+            Ellipsis<double> a(1.0, 1.0);           // actual circle
+            const Point<double> getted = a.GetPointByParam(PI/2);
+            Point<double> correct(0.0, 1.0, 0.0);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param = PI/2");
+        }
+        {
+            Ellipsis<double> a(2.0, 4.0);
+            const Point<double> getted = a.GetPointByParam(5);
+            Point<double> correct(0, 4, 0);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param ~= 5");
         }
     }
 
@@ -206,6 +317,9 @@ namespace MyUnitTests {
         RUN_TEST(CircleConstruction);
         RUN_TEST(CircleGetPointOfParam);
         RUN_TEST(TriDvectorConstruction);
+        RUN_TEST(CircleDerivative);
+        RUN_TEST(EllipsisConstruction);
+        RUN_TEST(EllipsisGetPointOfParam);
         cerr << "Tests done\n";
     }
 

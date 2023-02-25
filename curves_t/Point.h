@@ -60,8 +60,8 @@ std::ostream& operator<<(std::ostream& os, const Point<T>& point) {
 	return os;
 }
 
-// disable massive amount of "possible loss of data" warnings
-// from T to U conversion
+// disable massive amount of "possible loss of data" warnings,
+// emerged from T to U conversion
 #pragma warning(disable:4244)
 
 // Return distance with TYPE of first point
@@ -75,13 +75,13 @@ const T Distance(const Point<T>& lhs, const Point<U>& rhs) {
 	return ret;
 }
 
-// comparsion in less precision type
+// comparsion in (less precision type) T type
 template <typename T, typename U>
 bool AlmostEqual(const Point<T>& lhs, const Point<U>& rhs) {
 	// max of (T and U epsilons) - didn't work well
 	//const auto precision_max = std::fmax(std::numeric_limits<T>::epsilon(), std::numeric_limits<U>::epsilon());
 	const T Dist = Distance(lhs, rhs);
-	T PRECISION = static_cast<T>(1e-6);
+	T PRECISION = static_cast<T>(1e-6);			// hardcoded. Coulb be improved, for example by 2 significant digits or something depending on the value
 	return Dist < PRECISION;
 }
 
