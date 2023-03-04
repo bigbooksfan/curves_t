@@ -35,8 +35,8 @@ const T Circle<T>::GetRad() {
 
 template <typename T>
 const Point<T> Circle<T>::GetPointByParam(double param) {
-	T x = rad_ * std::cos(param / rad_);
-	T y = rad_ * std::sin(param / rad_);
+	T x = rad_ * std::cos(param);
+	T y = rad_ * std::sin(param);
 	T z = 0;
 
 	Point<T> ret(x, y, z);
@@ -45,8 +45,8 @@ const Point<T> Circle<T>::GetPointByParam(double param) {
 
 template <typename T>
 const TriDvector<T> Circle<T>::GetDerivativeByParam(double param) {
-	T x = (-1) * std::sin(param / rad_);
-	T y = std::cos(param / rad_);
+	T x = (-1) * std::sin(param);
+	T y = std::cos(param);
 	T z = 0;
 
 	TriDvector<T> ret(x, y, z);

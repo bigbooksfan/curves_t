@@ -40,8 +40,8 @@ const T Ellipsis<T>::GetRadY() {
 
 template<typename T>
 const Point<T> Ellipsis<T>::GetPointByParam(double param) {		// Mistake
-	T x = radX_ * std::cos(param / radY_);
-	T y = radY_ * std::sin(param / radX_);
+	T x = radX_ * std::cos(param);
+	T y = radY_ * std::sin(param);
 	T z = 0;
 
 	Point<T> ret(x, y, z);

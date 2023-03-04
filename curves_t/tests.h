@@ -172,9 +172,9 @@ namespace MyUnitTests {
         }
         {
             Circle<double> a(2.0);
-            const Point<double> p0 = a.GetPointByParam(PI);
+            const Point<double> p0 = a.GetPointByParam(PI / 2);
             Point<double> p0c(0, 2, 0);
-            ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = PI");
+            ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = PI/2");
         }
     }
 
@@ -231,21 +231,21 @@ namespace MyUnitTests {
             ASSERT_EQUAL_HINT(a, b, "Derivative by param 0 is wrong");
         }
         {
-            Circle<double> p(1);
+            Circle<double> p(2);
             TriDvector<double> correct(-1.0, 0.0, 0.0);
             TriDvector<double> getted = p.GetDerivativeByParam(PI/2);
             ASSERT_EQUAL_HINT(correct, getted, "Derivative by param PI/2 is wrong");
         }
         {
-            Circle<double> p(1);
+            Circle<double> p(3);
             TriDvector<double> correct(0.0, -1.0, 0.0);
             TriDvector<double> getted = p.GetDerivativeByParam(PI);
             ASSERT_EQUAL_HINT(correct, getted, "Derivative by param PI is wrong");
         }
         {
             Circle<double> p(10);
-            TriDvector<double> correct(-0.4794255386042030, 0.8775825618903727, 0.0);
-            TriDvector<double> getted = p.GetDerivativeByParam(5);
+            TriDvector<double> correct(1, 0, 0.0);
+            TriDvector<double> getted = p.GetDerivativeByParam(3 * PI / 2);
             ASSERT_EQUAL_HINT(correct, getted, "Derivative by param 5 is wrong");
         }
     }
@@ -305,9 +305,9 @@ namespace MyUnitTests {
         }
         {
             Ellipsis<double> a(2.0, 4.0);
-            const Point<double> getted = a.GetPointByParam(5);
-            Point<double> correct(0, 4, 0);
-            ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param ~= 5");
+            const Point<double> getted = a.GetPointByParam(PI);
+            Point<double> correct(-2, 0, 0);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param PI");
         }
     }
 
