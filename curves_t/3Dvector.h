@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Point.h"
+#include "point.h"
 
 template <typename T>
 class TriDvector {
@@ -23,10 +23,6 @@ public:			// methods
 	void Normalize();
 
 	Point<T> MakePoint() const;
-
-public:			// operators
-	//bool operator==(const TriDvector& v);
-	std::ostream& operator<<(const TriDvector& os);
 };
 
 /*********************************** METHOD DEFINITIONS ***************************************/

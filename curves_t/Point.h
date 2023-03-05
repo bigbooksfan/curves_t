@@ -8,9 +8,9 @@
 template <typename T>
 class Point {
 private:			// fields
-	T x_ = 0;
-	T y_ = 0;
-	T z_ = 0; 
+	const T x_ = 0;
+	const T y_ = 0;
+	const T z_ = 0; 
 
 public:				// constructors
 	Point() = delete;
@@ -20,10 +20,6 @@ public:				// methods
 	const T GetX() const;
 	const T GetY() const;
 	const T GetZ() const;
-
-public:				// operators
-	//std::ostream& operator<<(std::ostream& os);		// do i need it?
-
 };
 
 /*********************************** METHOD DEFINITIONS ***************************************/
@@ -81,7 +77,7 @@ bool AlmostEqual(const Point<T>& lhs, const Point<U>& rhs) {
 	// max of (T and U epsilons) - didn't work well
 	//const auto precision_max = std::fmax(std::numeric_limits<T>::epsilon(), std::numeric_limits<U>::epsilon());
 	const T Dist = Distance(lhs, rhs);
-	T PRECISION = static_cast<T>(1e-6);			// hardcoded. Coulb be improved, for example by 2 significant digits or something depending on the value
+	T PRECISION = static_cast<T>(1e-6);			// hardcoded. Might be improved, for example by 2 significant digits or something else depending on the value
 	return Dist < PRECISION;
 }
 

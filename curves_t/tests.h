@@ -6,10 +6,10 @@
 #include <cassert>
 #include <cstring>              // for strcmp in throw-catch check
 
-#include "Ñurve.h"
+#include "curve.h"
 #include "circle.h"
 #include "ellipsis.h"
-#include "Point.h"
+#include "point.h"
 #include "3Dvector.h"
 
 double PI = 3.14159265358979323846;
@@ -311,6 +311,41 @@ namespace MyUnitTests {
         }
     }
 
+    void EllipsisDerivative() {
+        {
+            Ellipsis<double> e(2, 1);
+            TriDvector<double> correct(0, 1, 0);
+            TriDvector<double> getted = e.GetDerivativeByParam(0);
+            ASSERT_EQUAL_HINT(correct, getted, "Ellipsis derivative by param = 0");
+        }
+        {
+            Ellipsis<double> e(4, 3);
+            TriDvector<double> correct(-1, 0, 0);
+            TriDvector<double> getted = e.GetDerivativeByParam(PI/2);
+            ASSERT_EQUAL_HINT(correct, getted, "Ellipsis derivative by param = PI/2");
+        }
+        {
+            Ellipsis<double> e(6, 1);
+            TriDvector<double> correct(1, 0, 0);
+            TriDvector<double> getted = e.GetDerivativeByParam(3 * PI / 2);
+            ASSERT_EQUAL_HINT(correct, getted, "Ellipsis derivative by param = 3*PI/2");
+        }
+        {
+            Ellipsis<double> e(2, 2);
+            TriDvector<double> correct(-1.41421356237, 1.41421356237, 0);
+            correct.Normalize();
+            TriDvector<double> getted = e.GetDerivativeByParam(PI / 4);
+            ASSERT_EQUAL_HINT(correct, getted, "Ellipsis derivative by param = PI/4");
+        }
+        {
+            Ellipsis<double> e(1, 0.5);
+            TriDvector<double> correct(-1.41421356237, 1.41421356237 / 2, 0);       // not sure about it
+            correct.Normalize();
+            TriDvector<double> getted = e.GetDerivativeByParam(PI / 4);
+            ASSERT_EQUAL_HINT(correct, getted, "Ellipsis derivative by param = PI/4");
+        }
+    }
+
     void RunTests() {
         RUN_TEST(PointConstruction);
         RUN_TEST(PointEqualityCheck);
@@ -320,6 +355,7 @@ namespace MyUnitTests {
         RUN_TEST(CircleDerivative);
         RUN_TEST(EllipsisConstruction);
         RUN_TEST(EllipsisGetPointOfParam);
+        RUN_TEST(EllipsisDerivative);
         cerr << "Tests done\n";
     }
 

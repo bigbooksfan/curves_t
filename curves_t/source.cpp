@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "Ñurve.h"
+#include "curve.h"
 #include "tests.h"
 
 int main() {

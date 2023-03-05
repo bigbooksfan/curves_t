@@ -20,13 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Сurve.h">
+    <ClInclude Include="curve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
+    <ClInclude Include="point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="3Dvector.h">
@@ -36,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ellipsis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

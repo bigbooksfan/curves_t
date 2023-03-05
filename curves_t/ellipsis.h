@@ -3,6 +3,10 @@
 template <typename T>
 class Ellipsis final : public Curve {
 
+private:			// fields
+	const T radX_ = 0;
+	const T radY_ = 0;
+
 public:				// constructors
 	Ellipsis() = delete;
 	explicit Ellipsis(T radX, T radY);
@@ -12,10 +16,6 @@ public:				// methods
 	const T GetRadY();
 	const Point<T> GetPointByParam(double param);
 	const TriDvector<T> GetDerivativeByParam(double param);
-
-private:			// fields
-	T radX_ = 0;
-	T radY_ = 0;
 };
 
 /****************************************** DEFINITIONS ************************************************/
@@ -45,5 +45,16 @@ const Point<T> Ellipsis<T>::GetPointByParam(double param) {		// Mistake
 	T z = 0;
 
 	Point<T> ret(x, y, z);
+	return ret;
+}
+
+template<typename T>
+const TriDvector<T> Ellipsis<T>::GetDerivativeByParam(double param) {
+	T x = (-1) * radX_ * std::sin(param);
+	T y = radY_ * std::cos(param);
+	T z = 0;
+
+	TriDvector<T> ret(x, y, z);
+	ret.Normalize();
 	return ret;
 }

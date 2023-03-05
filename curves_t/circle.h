@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Ñurve.h"
-
 template <typename T>
 class Circle final : public Curve {
+
+private:			// fields
+	const T rad_ = 0;
 
 public:				// constructors
 	Circle() = delete;
@@ -13,9 +14,6 @@ public:				// methods
 	const T GetRad();
 	const Point<T> GetPointByParam(double param);
 	const TriDvector<T> GetDerivativeByParam(double param);
-
-private:			// fields
-	T rad_ = 0;
 };
 
 /****************************************** DEFINITIONS ************************************************/
