@@ -20,6 +20,8 @@ public:				// methods
 	const T GetX() const;
 	const T GetY() const;
 	const T GetZ() const;
+
+	const void PrintOut();
 };
 
 /*********************************** METHOD DEFINITIONS ***************************************/
@@ -28,10 +30,11 @@ template<typename T>
 Point<T>::Point(T x, T y, T z) : x_(x), y_(y), z_(z) {
 	if (!std::is_floating_point<T>::value)
 		throw std::logic_error("Point coordinate is NOT floating type");
-	// Should i do it via 
-	//template <typename Floating,
-	//	std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true >
-	// ?
+	// I love it more than
+	// template <typename Floating,
+	// std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true >
+	// or
+	// static_assert
 }
 
 template <typename T>
@@ -47,6 +50,11 @@ const T Point<T>::GetY() const {
 template <typename T>
 const T Point<T>::GetZ() const {
 	return z_;
+}
+
+template<typename T>
+const void Point<T>::PrintOut() {
+	std::cout << "Point: x=" << x_ << ", y=" << y_ << ", z=" << z_ << std::endl;
 }
 
 /*********************************** Out-of-class fuctions ***************************************/

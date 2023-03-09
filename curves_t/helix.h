@@ -13,9 +13,11 @@ public:			// constructors
 	explicit Helix(T rad, T step);
 
 public:			// methods
-	T GetRad();
-	Point<T> GetPointByParam(T param);
-	TriDvector<T> GetDerivativeByParam(double param);
+	const T GetRad() const;
+	const Point<T> GetPointByParam(T param) const;
+	const TriDvector<T> GetDerivativeByParam(double param) const;
+
+	const bool IsCircle() const;
 };
 
 /****************************************** DEFINITIONS ************************************************/
@@ -29,12 +31,12 @@ Helix<T>::Helix(T rad, T step) : rad_(rad), step_(step) {
 }
 
 template<typename T>
-T Helix<T>::GetRad() {
+const T Helix<T>::GetRad() const {
 	return rad_;
 }
 
 template<typename T>
-Point<T> Helix<T>::GetPointByParam(T param) {
+const Point<T> Helix<T>::GetPointByParam(T param) const {
 	double PI = 3.14159265358979323846;
 	T PI_t = static_cast<T>(PI);
 
@@ -47,7 +49,7 @@ Point<T> Helix<T>::GetPointByParam(T param) {
 }
 
 template<typename T>
-TriDvector<T> Helix<T>::GetDerivativeByParam(double param) {
+const TriDvector<T> Helix<T>::GetDerivativeByParam(double param) const {
 	double PI = 3.14159265358979323846;
 	T PI_t = static_cast<T>(PI);
 	
@@ -58,4 +60,9 @@ TriDvector<T> Helix<T>::GetDerivativeByParam(double param) {
 	TriDvector<T> ret(x, y, z);
 	ret.Normalize();
 	return ret;
+}
+
+template<typename T>
+const bool Helix<T>::IsCircle() const {
+	return false;
 }

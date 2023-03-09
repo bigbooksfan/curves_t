@@ -3,8 +3,7 @@
 #include <cassert>
 #include <string>
 #include <iostream>
-#include <cassert>
-#include <cstring>              // for strcmp in throw-catch check
+#include <cstring>              // for strcmp in throw-catch message check
 
 #include "curve.h"
 #include "circle.h"
@@ -13,9 +12,9 @@
 #include "3Dvector.h"
 #include "helix.h"
 
-double PI = 3.14159265358979323846;
-
 namespace MyUnitTests {
+
+    double PI = 3.14159265358979323846;
 
     using std::string;
     using std::cerr;

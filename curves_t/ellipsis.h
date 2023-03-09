@@ -12,10 +12,12 @@ public:				// constructors
 	explicit Ellipsis(T radX, T radY);
 
 public:				// methods
-	const T GetRadX();
-	const T GetRadY();
-	const Point<T> GetPointByParam(T param);
-	const TriDvector<T> GetDerivativeByParam(double param);
+	const T GetRadX() const;
+	const T GetRadY() const;
+	const Point<T> GetPointByParam(T param) const;
+	const TriDvector<T> GetDerivativeByParam(double param) const;
+
+	const bool IsCircle() const;
 };
 
 /****************************************** DEFINITIONS ************************************************/
@@ -29,17 +31,17 @@ Ellipsis<T>::Ellipsis(T radX, T radY) : radX_(radX), radY_(radY) {
 }
 
 template<typename T>
-const T Ellipsis<T>::GetRadX() {
+const T Ellipsis<T>::GetRadX() const {
 	return radX_;
 }
 
 template<typename T>
-const T Ellipsis<T>::GetRadY() {
+const T Ellipsis<T>::GetRadY() const {
 	return radY_;
 }
 
 template<typename T>
-const Point<T> Ellipsis<T>::GetPointByParam(T param) {		// Mistake
+const Point<T> Ellipsis<T>::GetPointByParam(T param) const {
 	T x = radX_ * std::cos(param);
 	T y = radY_ * std::sin(param);
 	T z = 0;
@@ -49,7 +51,7 @@ const Point<T> Ellipsis<T>::GetPointByParam(T param) {		// Mistake
 }
 
 template<typename T>
-const TriDvector<T> Ellipsis<T>::GetDerivativeByParam(double param) {
+const TriDvector<T> Ellipsis<T>::GetDerivativeByParam(double param) const {
 	T x = (-1) * radX_ * std::sin(param);
 	T y = radY_ * std::cos(param);
 	T z = 0;
@@ -57,4 +59,9 @@ const TriDvector<T> Ellipsis<T>::GetDerivativeByParam(double param) {
 	TriDvector<T> ret(x, y, z);
 	ret.Normalize();
 	return ret;
+}
+
+template<typename T>
+const bool Ellipsis<T>::IsCircle() const {
+	return false;
 }
