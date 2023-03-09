@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename T>
-class Ellipsis final : public Curve {
+class Ellipsis final : public Curve<T> {
 
 private:			// fields
 	const T radX_ = 0;
@@ -14,7 +14,7 @@ public:				// constructors
 public:				// methods
 	const T GetRadX();
 	const T GetRadY();
-	const Point<T> GetPointByParam(double param);
+	const Point<T> GetPointByParam(T param);
 	const TriDvector<T> GetDerivativeByParam(double param);
 };
 
@@ -39,7 +39,7 @@ const T Ellipsis<T>::GetRadY() {
 }
 
 template<typename T>
-const Point<T> Ellipsis<T>::GetPointByParam(double param) {		// Mistake
+const Point<T> Ellipsis<T>::GetPointByParam(T param) {		// Mistake
 	T x = radX_ * std::cos(param);
 	T y = radY_ * std::sin(param);
 	T z = 0;

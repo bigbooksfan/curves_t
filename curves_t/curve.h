@@ -5,10 +5,11 @@
 #include "Point.h"
 #include "3Dvector.h"
 
+template <typename T>
 class Curve {
 
-protected:
-
+public:
+	virtual const T GetRad() {};
 
 
 };
