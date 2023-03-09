@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename T>
-class Circle final : public Curve {
+class Circle final : public Curve<T> {
 
 private:			// fields
 	const T rad_ = 0;
@@ -12,8 +12,8 @@ public:				// constructors
 
 public:				// methods
 	const T GetRad();
-	const Point<T> GetPointByParam(double param);
-	const TriDvector<T> GetDerivativeByParam(double param);
+	const Point<T> GetPointByParam(T param);
+	const TriDvector<T> GetDerivativeByParam(T param);
 };
 
 /****************************************** DEFINITIONS ************************************************/
@@ -32,7 +32,7 @@ const T Circle<T>::GetRad() {
 }
 
 template <typename T>
-const Point<T> Circle<T>::GetPointByParam(double param) {
+const Point<T> Circle<T>::GetPointByParam(T param) {
 	T x = rad_ * std::cos(param);
 	T y = rad_ * std::sin(param);
 	T z = 0;
@@ -42,7 +42,7 @@ const Point<T> Circle<T>::GetPointByParam(double param) {
 }
 
 template <typename T>
-const TriDvector<T> Circle<T>::GetDerivativeByParam(double param) {
+const TriDvector<T> Circle<T>::GetDerivativeByParam(T param) {
 	T x = (-1) * std::sin(param);
 	T y = std::cos(param);
 	T z = 0;

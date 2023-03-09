@@ -11,6 +11,7 @@
 #include "ellipsis.h"
 #include "point.h"
 #include "3Dvector.h"
+#include "helix.h"
 
 double PI = 3.14159265358979323846;
 
@@ -165,9 +166,10 @@ namespace MyUnitTests {
             ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = 0");
         }
         {
-            Circle<double> a(1.0);
-            const Point<double> p0 = a.GetPointByParam(PI);
-            Point<double> p0c(-1.0, 0.0, 0.0);
+            Circle<float> a(1.0);
+            float PI_f = 3.14159265358979323846f;           // using double is OK here, but compiler send "possible loss of data" warning
+            const Point<float> p0 = a.GetPointByParam(PI_f);
+            Point<float> p0c(-1.0, 0.0, 0.0);
             ASSERT_EQUAL_HINT(p0, p0c, "Wrong circle point of param = PI");
         }
         {
@@ -298,9 +300,10 @@ namespace MyUnitTests {
             ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param = 0");
         }
         {
-            Ellipsis<double> a(1.0, 1.0);           // actual circle
-            const Point<double> getted = a.GetPointByParam(PI/2);
-            Point<double> correct(0.0, 1.0, 0.0);
+            Ellipsis<float> a(1.0, 1.0);           // actual circle
+            float PI_f = 3.14159265358979323846f;           // using double is OK here, but compiler send "possible loss of data" warning
+            const Point<float> getted = a.GetPointByParam(PI_f/2);
+            Point<float> correct(0.0, 1.0, 0.0);
             ASSERT_EQUAL_HINT(correct, getted, "Wrong ellipsis point of param = PI/2");
         }
         {
@@ -346,6 +349,122 @@ namespace MyUnitTests {
         }
     }
 
+    void HelixConstruction() {
+        {
+            Helix<double> a(5, 10);
+        }
+        {       // non-floating type Circle construction
+            try {
+                Helix<int> p(1, 2);
+                ASSERT_HINT(false, "No exception by Helix constructed with non-floating type\n");                  // abort
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Helix coordinate is NOT floating type") == 0) {         // equal
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                ASSERT_HINT(false, "Helix constructed with non-floating type\n");
+            }
+        }
+        {
+            try {
+                Helix<double> p(-5.0, 6);
+                ASSERT_HINT(false, "No exception by Helix constructed with radii <= 0\n");                  // abort
+            }
+            catch (const std::logic_error& e) {
+                if (std::strcmp(e.what(), "Radii must be positive") == 0) {
+                    // OK
+                }
+                else {
+                    throw;
+                }
+            }
+            catch (...) {
+                ASSERT_HINT(false, "Helix constructed with radii <= 0\n");
+            }
+        }
+    }
+
+    void HelixGetPointByParam() {
+        {
+            Helix<double> a(1.0, 1.0);
+            Point<double> correct(-1, 0, 0.5);
+            const Point<double> getted = a.GetPointByParam(PI);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong helix point of param = PI");
+        }
+        {
+            Helix<float> a(2.0, -0.5);
+            Point<float> correct(0.0, -2.0, -0.375);
+            float PI_f = 3.14159265358979323846f;           // using double is OK here, but compiler send "possible loss of data" warning
+            const Point<float> getted = a.GetPointByParam(3 * PI_f / 2);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong helix point of param = 3*PI/2");
+        }
+        {
+            Helix<double> a(4.0, 2.0);
+            const Point<double> getted = a.GetPointByParam(314.159265358979323846);
+            Point<double> correct(4, 0, 100);
+            ASSERT_EQUAL_HINT(correct, getted, "Wrong helix point of param PI * 100");
+        }
+        {       // Testing of C(t + 2*PI) = C(t) + {0, 0, step}
+            double step = 544.32423;
+            Helix<double> a(23.4234, step);
+            double param = 49324.490234234;
+            const Point<double> getted = a.GetPointByParam(param);
+            int steps_counter = 0;
+            do {
+                param -= 2 * PI;
+                ++steps_counter;
+                if (param < 2 * PI) 
+                    break;
+            } while (1);
+            Point<double> reduced(a.GetPointByParam(param));
+            Point<double> reduced1(reduced.GetX(), reduced.GetY(), reduced.GetZ() + step * steps_counter);
+            ASSERT_EQUAL_HINT(getted, reduced1, "Wrong helix point of reduced param");
+        }
+    }
+
+    void HelixDerivative() {
+        {
+            Helix<double> h(2, 1);
+            TriDvector<double> correct(0, 1, PI);
+            correct.Normalize();
+            TriDvector<double> getted = h.GetDerivativeByParam(0);
+            ASSERT_EQUAL_HINT(correct, getted, "Helix derivative by param = 0");
+        }
+        {
+            Helix<double> h(4, 3);
+            TriDvector<double> correct(-1, 0, 2 * PI * 3 / 4);
+            correct.Normalize();
+            TriDvector<double> getted = h.GetDerivativeByParam(PI / 2);
+            ASSERT_EQUAL_HINT(correct, getted, "Helix derivative by param = PI/2");
+        }
+        {
+            Helix<double> h(6, 1);
+            TriDvector<double> correct(1, 0, 2 * PI / 6);
+            correct.Normalize();
+            TriDvector<double> getted = h.GetDerivativeByParam(3 * PI / 2);
+            ASSERT_EQUAL_HINT(correct, getted, "Helix derivative by param = 3*PI/2");
+        }
+        {
+            Helix<double> h(2, 2);
+            TriDvector<double> correct(-1.41421356237 / 2, 1.41421356237 / 2, 2 * PI);
+            correct.Normalize();
+            TriDvector<double> getted = h.GetDerivativeByParam(PI / 4);
+            ASSERT_EQUAL_HINT(correct, getted, "Helix derivative by param = PI/4");
+        }
+        {
+            Helix<double> h(2, 1);
+            TriDvector<double> correct(-1.41421356237 / 2, 1.41421356237 / 2, PI);
+            correct.Normalize();
+            TriDvector<double> getted = h.GetDerivativeByParam(PI / 4);
+            ASSERT_EQUAL_HINT(correct, getted, "Helix derivative by param = PI/4");
+        }
+    }
+
     void RunTests() {
         RUN_TEST(PointConstruction);
         RUN_TEST(PointEqualityCheck);
@@ -356,6 +475,9 @@ namespace MyUnitTests {
         RUN_TEST(EllipsisConstruction);
         RUN_TEST(EllipsisGetPointOfParam);
         RUN_TEST(EllipsisDerivative);
+        RUN_TEST(HelixConstruction);
+        RUN_TEST(HelixGetPointByParam);
+        RUN_TEST(HelixDerivative);
         cerr << "Tests done\n";
     }
 
